@@ -10,10 +10,13 @@
   "main": "src/main/main.js",
   "scripts": {
     "start": "electron .",
-    "test": "node __TEST/bypass.unit.test.js"
+    "test": "node __TEST/bypass.unit.test.js",
+    "build": "rollup -c rollup.config.js"
   },
   "devDependencies": {
-    "electron": "^42.0.0"
+    "@rollup/plugin-terser": "^1.0.0",
+    "electron": "^42.0.0",
+    "rollup": "^4.60.3"
   },
   "dependencies": {
     "cheerio": "^1.2.0"
