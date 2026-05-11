@@ -220,9 +220,9 @@ $('#btn-print').addEventListener('click', async () => {
 
     if (result.success) {
         btn.textContent = 'PDF Salvo!';
-        setTimeout(() => { btn.textContent = 'Imprimir'; btn.disabled = false; }, 2000);
+        setTimeout(() => { btn.textContent = 'SALVAR PDF'; btn.disabled = false; }, 2000);
     } else {
-        btn.textContent = 'Imprimir';
+        btn.textContent = 'SALVAR PDF';
         btn.disabled = false;
     }
 });
