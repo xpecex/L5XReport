@@ -1,0 +1,21 @@
+{
+  "name": "L5XReport",
+  "version": "1.0.0",
+  "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports",
+  "author": "Pedro Filipe C Ferreira",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xpecex/L5XReport.git"
+  },
+  "main": "src/main/main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node __TEST/bypass.unit.test.js"
+  },
+  "devDependencies": {
+    "electron": "^42.0.0"
+  },
+  "dependencies": {
+    "cheerio": "^1.2.0"
+  }
+}
