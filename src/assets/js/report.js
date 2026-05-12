@@ -1,6 +1,6 @@
 'use strict';
 
-const ipc = window.ipc;
+const ipc = window.electronAPI;
 
 let reportData = null;
 
@@ -205,7 +205,7 @@ function render() {
 }
 
 // Listen for report-data from main process
-ipc.on('report-data', (_, data) => {
+ipc.onReportData((_, data) => {
     reportData = data;
     render();
 });
@@ -216,7 +216,7 @@ $('#btn-print').addEventListener('click', async () => {
     btn.disabled = true;
     btn.textContent = 'Gerando PDF...';
 
-    const result = await ipc.invoke('print-pdf');
+    const result = await ipc.printPdf();
 
     if (result.success) {
         btn.textContent = 'PDF Salvo!';

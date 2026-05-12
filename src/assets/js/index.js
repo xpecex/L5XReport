@@ -1,6 +1,6 @@
 'use strict';
 
-const ipc = window.ipc;
+const ipc = window.electronAPI;
 
 // State
 let filePath = '';
@@ -95,7 +95,7 @@ function setProgress(current, total, label) {
 
 // File selection
 btnSelectFile.addEventListener('click', async () => {
-    const result = await ipc.invoke('select-file');
+    const result = await ipc.selectFile();
     if (result && result.filePath) {
         filePath = result.filePath;
         reportPath = result.reportPath || '';
@@ -162,11 +162,11 @@ btnStartScan.addEventListener('click', async () => {
         }
     };
 
-    ipc.on('scan-progress', progressHandler);
-    ipc.on('scan-complete', completeHandler);
+    ipc.onProgress(progressHandler);
+    ipc.onComplete(completeHandler);
 
     try {
-        await ipc.invoke('start-scan', { filePath, scanConfig });
+        await ipc.startScan({ filePath, scanConfig });
     } catch (err) {
         setProgress(0, totalRoutines, 'Erro');
         btnCancelScan.classList.add('hidden');
@@ -175,11 +175,11 @@ btnStartScan.addEventListener('click', async () => {
 });
 
 btnCancelScan.addEventListener('click', async () => {
-    await ipc.invoke('cancel-scan');
+    await ipc.cancelScan();
 });
 
 btnOpenReport.addEventListener('click', async () => {
-    await ipc.invoke('open-report', { results: scanResults, totalRoutines, totalPrograms, reportPath, filePath });
+    await ipc.openReport({ results: scanResults, totalRoutines, totalPrograms, reportPath, filePath });
 });
 
 btnBack3.addEventListener('click', () => showSection(2));

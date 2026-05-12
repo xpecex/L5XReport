@@ -1,6 +1,6 @@
 'use strict';
 
-const { ipcMain, dialog, BrowserWindow } = require('electron/main');
+const { app, ipcMain, dialog, BrowserWindow } = require('electron/main');
 
 let activeWorker = null;
 let reportPath = null;
@@ -126,9 +126,9 @@ const registerIpcHandlers = (mainWindow) => {
             width: 1200,
             height: 900,
             webPreferences: {
-                preload: path.resolve('src/preload', 'preload.js'),
-                contextIsolation: false,
-                nodeIntegration: true
+                preload: app.isPackaged ? path.join('asar:', app.getAppPath(), 'src/preload/preload.js') : path.resolve('src/preload', 'preload.js'),
+                contextIsolation: true,
+                nodeIntegration: false
             }
         });
 
