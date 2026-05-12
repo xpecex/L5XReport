@@ -11,11 +11,15 @@
   "scripts": {
     "start": "electron .",
     "test": "node __TEST/bypass.unit.test.js",
-    "build": "rollup -c rollup.config.js"
+    "build": "rollup -c rollup.config.js",
+    "test:e2e": "cmd /c set E2E_TEST=true&&npx playwright test e2e"
   },
   "devDependencies": {
+    "@playwright/electron": "^0.0.1",
+    "@playwright/test": "^1.60.0",
     "@rollup/plugin-terser": "^1.0.0",
     "electron": "^42.0.0",
+    "playwright": "^1.60.0",
     "rollup": "^4.60.3"
   },
   "dependencies": {
