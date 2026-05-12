@@ -15,6 +15,13 @@ const registerIpcHandlers = (mainWindow) => {
 
         const path = require('node:path');
 
+        if (process.env.E2E_TEST === 'true') {
+            const filePath = path.resolve('__TEST', 'ProjectTest.L5X');
+            const filename = path.basename(filePath, '.L5X');
+            reportPath = path.join(path.dirname(filePath), `${filename}_BypassReport.xlsx`);
+            return { filePath, reportPath };
+        }
+
         const result = await dialog.showOpenDialog(mainWindow, {
             title: 'Selecionar Arquivo L5X',
             filters: [
@@ -153,17 +160,24 @@ const registerIpcHandlers = (mainWindow) => {
 
         const now = new Date().toISOString().replace(/(-|:|\.|Z)/g, '').replace('T', '_');
         const path = require('node:path');
+        const fs = require('node:fs');
 
-        const { canceled, filePath } = await dialog.showSaveDialog(reportWin, {
-            title: 'Salvar Relatório PDF',
-            defaultPath: `L5XReport_${now}.pdf`,
-            filters: [
-                { name: 'PDF Files', extensions: ['pdf'] },
-                { name: 'All Files', extensions: ['*'] }
-            ]
-        });
+        let filePath;
+        if (process.env.E2E_TEST === 'true') {
+            filePath = path.resolve('__TEST', `L5XReport_${now}.pdf`);
+        } else {
+            const { canceled, filePath: savePath } = await dialog.showSaveDialog(reportWin, {
+                title: 'Salvar Relatório PDF',
+                defaultPath: `L5XReport_${now}.pdf`,
+                filters: [
+                    { name: 'PDF Files', extensions: ['pdf'] },
+                    { name: 'All Files', extensions: ['*'] }
+                ]
+            });
 
-        if (canceled || !filePath) return { success: false };
+            if (canceled || !savePath) return { success: false };
+            filePath = savePath;
+        }
 
         try {
             const pdfBuffer = await reportWin.webContents.printToPDF({
@@ -172,7 +186,6 @@ const registerIpcHandlers = (mainWindow) => {
                 preferCSSPageSize: true,
                 margin: { top: 0, bottom: 0, left: 0, right: 0 }
             });
-            const fs = require('node:fs');
             fs.writeFileSync(filePath, pdfBuffer);
             return { success: true, filePath };
         } catch (err) {
