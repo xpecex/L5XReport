@@ -63,18 +63,22 @@ const registerIpcHandlers = (mainWindow) => {
             const path = require('node:path');
             const { Worker } = require('node:worker_threads');
 
-            activeWorker = new Worker(path.resolve('src/main', 'bypass.js'), {
+            const workerPath = app.isPackaged
+                ? path.join(app.getAppPath(), 'src/main/bypass.js')
+                : path.resolve('src/main', 'bypass.js');
+
+            activeWorker = new Worker(workerPath, {
                 workerData: { filepath: filePath, CONFIG: scanConfig }
             });
 
             activeWorker.on('message', (message) => {
                 switch (message.type) {
                     case 'PROGRESS':
-                        webContents.send('scan-progress', message.payload);
+                        mainWindow.webContents.send('scan-progress', message.payload);
                         break;
                     case 'SUCCESS':
                         activeWorker = null;
-                        webContents.send('scan-complete', {
+                        mainWindow.webContents.send('scan-complete', {
                             results: message.payload.results,
                             totalRoutines: message.payload.totalRoutinesScanned,
                             totalPrograms: message.payload.totalPrograms,
@@ -84,14 +88,14 @@ const registerIpcHandlers = (mainWindow) => {
                         break;
                     case 'ERROR':
                         activeWorker = null;
-                        webContents.send('scan-cancelled', message.payload);
+                        mainWindow.webContents.send('scan-cancelled', message.payload);
                         reject(message.payload);
                         break;
                 }
             });
 
             activeWorker.on('error', (e) => {
-                webContents.send('scan-cancelled', e);
+                mainWindow.webContents.send('scan-cancelled', e);
                 reject(e);
             });
             activeWorker.on('exit', (code) => {
@@ -112,6 +116,11 @@ const registerIpcHandlers = (mainWindow) => {
         return { success: false };
     });
 
+    ipcMain.handle('gotoGithub', async () => {
+        const { shell } = require('electron');
+        await shell.openExternal("https://github.com/xpecex/L5XReport");
+    });
+
     // ============================================================
     // Report Management
     // ============================================================
@@ -126,7 +135,7 @@ const registerIpcHandlers = (mainWindow) => {
             width: 1200,
             height: 900,
             webPreferences: {
-                preload: app.isPackaged ? path.join('asar:', app.getAppPath(), 'src/preload/preload.js') : path.resolve('src/preload', 'preload.js'),
+                preload: app.isPackaged ? path.join(app.getAppPath(), 'src/preload/preload.js') : path.resolve('src/preload', 'preload.js'),
                 contextIsolation: true,
                 nodeIntegration: false
             }
@@ -139,7 +148,7 @@ const registerIpcHandlers = (mainWindow) => {
         });
 
         reportWindow.removeMenu();
-        reportWindow.loadFile(path.resolve('src/renderer', 'report.html'));
+        reportWindow.loadFile(app.isPackaged ? path.join(app.getAppPath(), 'src/renderer/report.html') : path.resolve('src/renderer', 'report.html'));
 
         reportWindow.webContents.on('did-finish-load', () => {
             reportWindow.webContents.send('report-data', {

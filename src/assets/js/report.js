@@ -205,7 +205,7 @@ function render() {
 }
 
 // Listen for report-data from main process
-ipc.onReportData((_, data) => {
+ipc.onReportData((data) => {
     reportData = data;
     render();
 });

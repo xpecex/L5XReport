@@ -19,9 +19,10 @@
   "scripts": {
     "start": "electron .",
     "test": "node __TEST/bypass.unit.test.js",
+    "test:e2e": "cmd /c set E2E_TEST=true&&npx playwright test e2e",
     "build:bundler": "rollup -c rollup.config.js",
     "build:package": "npm exec --package=electron-builder -- electron-builder",
-    "test:e2e": "cmd /c set E2E_TEST=true&&npx playwright test e2e"
+    "build:full": "cmd /c npm run build:bundler && npm run build:package"
   },
   "devDependencies": {
     "@playwright/electron": "^0.0.1",

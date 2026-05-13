@@ -12,7 +12,7 @@ const createWindow = () => {
         width: 800,
         height: 640,
         webPreferences: {
-            preload: app.isPackaged ? path.join('asar:', app.getAppPath(), 'src/preload/preload.js') : path.resolve('src/preload', 'preload.js'),
+            preload: app.isPackaged ? path.join(app.getAppPath(), 'src/preload/preload.js') : path.resolve('src/preload', 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false
         }
@@ -24,7 +24,7 @@ const createWindow = () => {
         }
     });
 
-    mainWindow.loadFile(app.isPackaged ? path.join(app.getAppPath(), 'src/renderer/index.html') : path.resolve('src/renderer/index.html', 'index.html'));
+    mainWindow.loadFile(app.isPackaged ? path.join(app.getAppPath(), 'src/renderer/index.html') : path.resolve('src/renderer/index.html'));
 };
 
 app.on('ready', () => {
@@ -34,7 +34,7 @@ app.on('ready', () => {
 app.whenReady().then(() => {
     createWindow();
     require('./ipcHandlers').registerIpcHandlers(mainWindow);
-
+    
     app.on('activate', () => {
         if (BrowserWindow.getAllWindows().length === 0) {
             createWindow();
