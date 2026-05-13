@@ -92,15 +92,17 @@ const L5XScanWorker = async () => {
 
             // --- RELATÓRIO DE PROGRESSO ---
             const percent = Math.round(((i + 1) / totalRoutines) * 100);
-            parentPort.postMessage({
-                type: 'PROGRESS',
-                payload: {
-                    current: i + 1,
-                    total: totalRoutines,
-                    percent,
-                    lastRoutine: routineName
-                }
-            });
+            setImmediate(() => {
+                parentPort.postMessage({
+                    type: 'PROGRESS',
+                    payload: {
+                        current: i + 1,
+                        total: totalRoutines,
+                        percent,
+                        lastRoutine: routineName
+                    }
+                });
+            })
         }
 
         const totalRoutinesScanned = $routines.filter((_, el) => {
