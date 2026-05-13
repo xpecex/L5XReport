@@ -1,6 +1,6 @@
 'use strict';
 
-const ipc = window.ipc;
+const ipc = window.electronAPI;
 
 // State
 let filePath = '';
@@ -33,6 +33,7 @@ const progressCounter = $('#progress-counter');
 const btnCancelScan = $('#btn-cancel-scan');
 const btnOpenReport = $('#btn-open-report');
 const btnBack3 = $('#btn-back-3');
+const gotoGithub = $('#gotoGithub');
 
 // Navigation
 function showSection(n) {
@@ -95,7 +96,7 @@ function setProgress(current, total, label) {
 
 // File selection
 btnSelectFile.addEventListener('click', async () => {
-    const result = await ipc.invoke('select-file');
+    const result = await ipc.selectFile();
     if (result && result.filePath) {
         filePath = result.filePath;
         reportPath = result.reportPath || '';
@@ -143,12 +144,13 @@ btnStartScan.addEventListener('click', async () => {
     if (progressHandler) ipc.removeAllListeners('scan-progress');
     if (completeHandler) ipc.removeAllListeners('scan-complete');
 
-    progressHandler = (_, data) => {
+    progressHandler = (data) => {
         totalRoutines = data.total;
         setProgress(data.current, data.total, data.lastRoutine || '');
     };
 
-    completeHandler = (_, data) => {
+    completeHandler = (data) => {
+        console.log(data);
         setProgress(totalRoutines, totalRoutines, 'Concluído');
         reportPath = data.reportPath || filePath;
         scanResults = data.results || [];
@@ -162,11 +164,11 @@ btnStartScan.addEventListener('click', async () => {
         }
     };
 
-    ipc.on('scan-progress', progressHandler);
-    ipc.on('scan-complete', completeHandler);
+    ipc.onProgress(progressHandler);
+    ipc.onComplete(completeHandler);
 
     try {
-        await ipc.invoke('start-scan', { filePath, scanConfig });
+        await ipc.startScan({ filePath, scanConfig });
     } catch (err) {
         setProgress(0, totalRoutines, 'Erro');
         btnCancelScan.classList.add('hidden');
@@ -175,14 +177,18 @@ btnStartScan.addEventListener('click', async () => {
 });
 
 btnCancelScan.addEventListener('click', async () => {
-    await ipc.invoke('cancel-scan');
+    await ipc.cancelScan();
 });
 
 btnOpenReport.addEventListener('click', async () => {
-    await ipc.invoke('open-report', { results: scanResults, totalRoutines, totalPrograms, reportPath, filePath });
+    await ipc.openReport({ results: scanResults, totalRoutines, totalPrograms, reportPath, filePath });
 });
 
 btnBack3.addEventListener('click', () => showSection(2));
+
+gotoGithub.addEventListener('click', async () => {
+    await ipc.gotoGithub();
+});
 
 // Init
 validateSection2();
