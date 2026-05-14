@@ -40,7 +40,7 @@ const registerIpcHandlers = (mainWindow) => {
         if (process.env.E2E_TEST === 'true') {
             const filePath = path.resolve('__TEST', 'ProjectTest.L5X');
             const filename = path.basename(filePath, '.L5X');
-            reportPath = path.join(path.dirname(filePath), `${filename}_BypassReport.xlsx`);
+            reportPath = path.join(path.dirname(filePath), `${filename}`);
             return { filePath, reportPath };
         }
 
@@ -59,7 +59,7 @@ const registerIpcHandlers = (mainWindow) => {
 
         const filePath = result.filePaths[0];
         const filename = path.basename(filePath, '.L5X');
-        reportPath = path.join(path.dirname(filePath), `${filename}_BypassReport.xlsx`);
+        reportPath = path.join(path.dirname(filePath), `${filename}`);
         return { filePath, reportPath };
     });
 
@@ -178,6 +178,14 @@ const registerIpcHandlers = (mainWindow) => {
             return { success: false };
         }
 
+        let result = {
+            results,
+            totalRoutines,
+            totalPrograms,
+            reportPath,
+            filePath
+        };
+
         const reportWindow = new BrowserWindow({
             width: 1200,
             height: 900,
@@ -192,13 +200,7 @@ const registerIpcHandlers = (mainWindow) => {
         reportWindow.loadFile(app.isPackaged ? path.join(app.getAppPath(), 'src/renderer/report.html') : path.resolve('src/renderer', 'report.html'));
 
         reportWindow.webContents.on('did-finish-load', () => {
-            reportWindow.webContents.send('report-data', {
-                results,
-                totalRoutines,
-                totalPrograms,
-                reportPath,
-                filePath
-            });
+            reportWindow.webContents.send('report-data', result);
         });
 
         return { success: true };

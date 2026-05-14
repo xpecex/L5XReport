@@ -104,20 +104,22 @@ function renderBypassBadge(bypassStr) {
 function renderPieChart(levelCounts) {
     const total = levelCounts.standard + levelCounts.safety;
     if (total === 0) {
-        return { dashA: '0 251', dashB: '0 251', offsetB: '-0', pctA: 0, pctB: 0 };
+        let res = { dashA: '0 251', dashB: '0 251', offsetB: '-0', pctA: 0, pctB: 0 };
+        return res;
     }
     const circumference = 251;
     const safetyPct = (levelCounts.safety / total) * 100;
     const standardPct = (levelCounts.standard / total) * 100;
     const safetyDash = ((safetyPct / 100) * circumference).toFixed(2);
     const standardDash = ((standardPct / 100) * circumference).toFixed(2);
-    return {
+    let res = {
         dashA: `${standardDash} ${circumference}`,
         dashB: `${safetyDash} ${circumference}`,
         offsetB: `-${standardDash}`,
         pctA: (standardPct).toFixed(2),
         pctB: (safetyPct).toFixed(2)
     };
+    return res;
 }
 
 /**
@@ -312,3 +314,11 @@ $('#btn-print').addEventListener('click', async () => {
         btn.disabled = false;
     }
 });
+
+const beforeUnloadHandler = (event) => {
+    if (reportData) {
+        reportData = null;
+    }
+};
+
+window.addEventListener('beforeunload', beforeUnloadHandler)

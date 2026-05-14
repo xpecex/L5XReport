@@ -33,7 +33,7 @@ app.commandLine.appendSwitch('disable-software-rasterizer');
 
 // Flags JS
 app.commandLine.appendSwitch('js-flags', [
-    '--max-old-space-size=256',      // limita heap (default 700MB+ é excessivo para uma app desktop)
+    '--max-old-space-size=512',      // limita heap (default 700MB+ é excessivo para uma app desktop)
     '--optimize-for-size',           // favorece memória sobre velocidade de JIT
     '--turbo-fast-api-calls',        // otimiza chamadas de API nativas
     '--nouse-idle-notification',      // Impede o V8 de gastar tempo limpando memória em momentos de ociosidade
@@ -83,6 +83,12 @@ const createWindow = () => {
             preload: app.isPackaged ? path.join(app.getAppPath(), 'src/preload/preload.js') : path.resolve('src/preload', 'preload.js'),
             contextIsolation: true,
             nodeIntegration: false
+        }
+    });
+
+    mainWindow.webContents.on('before-input-event', (event, input) => {
+        if (input.type === 'keyDown' && input.key === 'F12') {
+            mainWindow.webContents.toggleDevTools();
         }
     });
 

@@ -230,6 +230,9 @@ btnBack2.addEventListener('click', () => showSection(1));
  */
 btnStartScan.addEventListener('click', async () => {
     totalRoutines = 0;
+    totalPrograms = 0;
+    reportPath = '';
+    scanResults = [];
     setProgress(0, 0, 'Aguardando...');
     showSection(3);
 
@@ -265,7 +268,6 @@ btnStartScan.addEventListener('click', async () => {
      * @param {number} data.totalPrograms - Total programs scanned.
      */
     completeHandler = (data) => {
-        console.log(data);
         setProgress(totalRoutines, totalRoutines, 'Concluído');
         reportPath = data.reportPath || filePath;
         scanResults = data.results || [];
@@ -302,7 +304,8 @@ btnCancelScan.addEventListener('click', async () => {
  * Handle opening the report window. Sends scan results and metadata via IPC.
  */
 btnOpenReport.addEventListener('click', async () => {
-    await ipc.openReport({ results: scanResults, totalRoutines, totalPrograms, reportPath, filePath });
+    let res = { results: scanResults, totalRoutines, totalPrograms, reportPath, filePath };
+    await ipc.openReport(res);
 });
 
 /** Navigate from section 3 (progress) back to section 2 (configuration). */

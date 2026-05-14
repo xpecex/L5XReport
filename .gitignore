@@ -146,4 +146,5 @@ vite.config.ts.timestamp-*
 .crush/*
 
 # Playwright
-test-results/*
+test-results/
+.playwright-mcp/
