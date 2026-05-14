@@ -11,7 +11,7 @@ Electron app that scans **L5X files** (Rockwell/Allen-Bradley Logix controller X
 ```bash
 npm install              # Install dependencies
 npm start                # Launch Electron app
-npm run test             # Run unit tests for scanner output validation
+npm run test:unit             # Run unit tests for scanner output validation
 npm run test:e2e         # Run end-to-end tests with Playwright
 ```
 
@@ -47,7 +47,7 @@ rollup.config.js         Rollup bundler configuration
 
 - `main.js` — Electron main process. Creates `BrowserWindow`, sets up app lifecycle events (`ready`, `activate`, `window-all-closed`), disables application menu, and registers `ipcHandlers.js`. F12 toggles DevTools.
 - `ipcHandlers.js` — IPC handlers module. Exports `registerIpcHandlers(mainWindow)`, `getActiveWorker`, `setActiveWorker`, `getReportPath`. Wires all IPC events: `select-file`, `clear-file`, `start-scan`, `cancel-scan`, `open-report`, `print-pdf`, `gotoGithub`. Manages `activeWorker` and `reportPath` state. Handles `E2E_TEST=true` env flag to bypass dialogs.
-- `bypass.js` — Worker script (runs in a separate `worker_threads` thread). Receives `filepath` and `CONFIG` via `workerData`. Parses L5X XML with Cheerio (`xmlMode: true`), iterates Routines→Rungs, matches bypass patterns, posts `PROGRESS`/`SUCCESS`/`ERROR` messages to the main thread. Skips 'Empty' routines.
+- `bypass.js` — Worker script (runs in a separate `worker_threads` thread). Receives `filepath` and `CONFIG` via `workerData`. Parses L5X XML with Cheerio (`xmlMode: true`), iterates Routines→Rungs, matches bypass patterns, posts `PROGRESS`/`SUCCESS`/`ERROR` messages to the main thread. Skips 'Empty' routines. **v1.1 optimizations**: controller metadata cached once, program cache on transition, conditional text extraction, inline totals tracking, removed `setImmediate` overhead.
 - `preload.js` — Context bridge. Exposes `electronAPI` on `window` with: `selectFile`, `clearFile`, `startScan`, `cancelScan`, `openReport`, `onProgress`, `onComplete`, `onReportData`, `printPdf`, `gotoGithub`, `removeAllListeners`.
 - `index.js` — Renderer logic. Manages 3-section UI navigation, file selection, scan config (keywords + checkboxes), progress bar, IPC event listeners (`scan-progress`, `scan-complete`), and controls report button.
 - `report.js` — Report rendering logic. Renders pie charts (by level + by bypass type), detailed results table with badges, header info (controller, backup/audit dates), footer.
