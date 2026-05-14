@@ -1,17 +1,42 @@
+/**
+ * Report renderer script for the L5XReport application.
+ * Renders the audit report UI: pie charts, detailed results table, header
+ * metadata, and footer with file info. Listens for `report-data` IPC events.
+ * @module assets/js/report
+ */
 'use strict';
 
 const ipc = window.electronAPI;
 
+/** Data object received from the main process via `report-data` IPC event. */
 let reportData = null;
 
 // DOM helpers
+/**
+ * Query selector helper.
+ * @function $
+ * @param {string} sel - CSS selector.
+ * @returns {HTMLElement|null}
+ */
 const $ = (sel) => document.querySelector(sel);
 
 // Level classification: "Safety" = safety, anything else = standard
+/**
+ * Check if a level string contains "Safety" (case-insensitive).
+ * @function isSafety
+ * @param {string} level - Program class level string.
+ * @returns {boolean} True if the level is classified as safety.
+ */
 function isSafety(level) {
     return /Safety/i.test(level);
 }
 
+/**
+ * Format a date string to Brazilian locale short date.
+ * @function formatDateTime
+ * @param {string} dateStr - ISO date string from the L5X backup.
+ * @returns {string} Formatted date (`pt-BR` locale) or original string if invalid.
+ */
 function formatDateTime(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr);
@@ -19,6 +44,12 @@ function formatDateTime(dateStr) {
     return d.toLocaleDateString('pt-BR');
 }
 
+/**
+ * Format a date string to Brazilian locale date-time.
+ * @function formatAuditDateTime
+ * @param {string} dateStr - ISO date string from the audit timestamp.
+ * @returns {string} Formatted date-time (`pt-BR` locale) or original string if invalid.
+ */
 function formatAuditDateTime(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr);
@@ -26,6 +57,13 @@ function formatAuditDateTime(dateStr) {
     return d.toLocaleString('pt-BR');
 }
 
+/**
+ * Render a level badge element as HTML string.
+ * Returns a "Safety" or "Standard" badge with shared styling.
+ * @function renderLevelBadge
+ * @param {string} level - Program class level string.
+ * @returns {string} HTML span with level badge class and label.
+ */
 function renderLevelBadge(level) {
     const safety = isSafety(level);
     const label = safety ? 'Safety' : 'Standard';
@@ -33,6 +71,13 @@ function renderLevelBadge(level) {
     return `<span class="px-2 py-0.5 rounded-full ${bgClass} font-bold">${label}</span>`;
 }
 
+/**
+ * Render a bypass badge element as HTML string.
+ * Bit bypasses ("BIT:") are yellow; others are red.
+ * @function renderBypassBadge
+ * @param {string} bypassStr - Comma-separated bypass types string.
+ * @returns {string} HTML string with colored span elements, or empty string.
+ */
 function renderBypassBadge(bypassStr) {
     if (!bypassStr) return '';
     const parts = bypassStr.split(',').map(s => s.trim());
@@ -43,25 +88,46 @@ function renderBypassBadge(bypassStr) {
     }).join(', ');
 }
 
+/**
+ * Calculate SVG stroke-dash values for the level distribution pie chart.
+ * @function renderPieChart
+ * @param {Object} levelCounts - Distribution counts.
+ * @param {number} levelCounts.standard - Standard bypass count.
+ * @param {number} levelCounts.safety - Safety bypass count.
+ * @returns {Object} SVG chart configuration.
+ * @returns {string} returns.dashA - Standard circle stroke-dasharray.
+ * @returns {string} returns.dashB - Safety circle stroke-dasharray.
+ * @returns {string} returns.offsetB - Safety circle stroke-dashoffset.
+ * @returns {number} returns.pctA - Standard percentage.
+ * @returns {number} returns.pctB - Safety percentage.
+ */
 function renderPieChart(levelCounts) {
     const total = levelCounts.standard + levelCounts.safety;
     if (total === 0) {
-        return { dashA: '0 251', dashB: '0 251', offsetB: '-0', pctA: 0, pctB: 0 };
+        let res = { dashA: '0 251', dashB: '0 251', offsetB: '-0', pctA: 0, pctB: 0 };
+        return res;
     }
     const circumference = 251;
     const safetyPct = (levelCounts.safety / total) * 100;
     const standardPct = (levelCounts.standard / total) * 100;
     const safetyDash = ((safetyPct / 100) * circumference).toFixed(2);
     const standardDash = ((standardPct / 100) * circumference).toFixed(2);
-    return {
+    let res = {
         dashA: `${standardDash} ${circumference}`,
         dashB: `${safetyDash} ${circumference}`,
         offsetB: `-${standardDash}`,
         pctA: (standardPct).toFixed(2),
         pctB: (safetyPct).toFixed(2)
     };
+    return res;
 }
 
+/**
+ * Render the full audit report UI from report data.
+ * Updates header, totals, dates, both pie charts, results table, and footer.
+ * @function render
+ * @param {Object} reportData - The report data object (from `onReportData` IPC event).
+ */
 function render() {
     if (!reportData) return;
 
@@ -137,6 +203,16 @@ function render() {
         '#3B3C36', '#880085', '#FFF5EE', '#010B13', '#8ca9cd'
     ];
 
+    /**
+     * Calculate SVG path for a pie slice arc.
+     * @function arcPath
+     * @param {number} cx - Center X coordinate.
+     * @param {number} cy - Center Y coordinate.
+     * @param {number} r - Radius.
+     * @param {number} startAngle - Start angle in degrees.
+     * @param {number} endAngle - End angle in degrees.
+     * @returns {string} SVG path `d` attribute string.
+     */
     function arcPath(cx, cy, r, startAngle, endAngle) {
         const startRad = (startAngle - 90) * Math.PI / 180;
         const endRad = (endAngle - 90) * Math.PI / 180;
@@ -205,12 +281,24 @@ function render() {
 }
 
 // Listen for report-data from main process
+/**
+ * `report-data` IPC handler — stores data and triggers render.
+ * @param {Object} data - Report data from the main process.
+ * @param {Array} data.results - Scan results.
+ * @param {number} data.totalRoutines - Total routines scanned.
+ * @param {number} data.totalPrograms - Total programs scanned.
+ * @param {string} data.reportPath - Report file path.
+ * @param {string} data.filePath - Source L5X file path.
+ */
 ipc.onReportData((data) => {
     reportData = data;
     render();
 });
 
 // Print PDF handler
+/**
+ * Handle PDF generation — disables button during generation, shows result status.
+ */
 $('#btn-print').addEventListener('click', async () => {
     const btn = $('#btn-print');
     btn.disabled = true;
@@ -226,3 +314,11 @@ $('#btn-print').addEventListener('click', async () => {
         btn.disabled = false;
     }
 });
+
+const beforeUnloadHandler = (event) => {
+    if (reportData) {
+        reportData = null;
+    }
+};
+
+window.addEventListener('beforeunload', beforeUnloadHandler)

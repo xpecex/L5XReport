@@ -144,3 +144,7 @@ vite.config.ts.timestamp-*
 
 # Crush Files
 .crush/*
+
+# Playwright
+test-results/
+.playwright-mcp/
