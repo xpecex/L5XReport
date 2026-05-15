@@ -3,7 +3,11 @@
   "version": "1.1.0",
   "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports. v1.1 includes worker performance optimizations: metadata caching, conditional text extraction, inline totals, reduced postMessage overhead.",
   "license": "GPLv2",
-  "author": "Pedro Filipe C Ferreira <xpecex@outlook.com>",
+  "author": {
+    "name": "Pedro Filipe C Ferreira <xpecex@outlook.com>",
+    "email": "xpecex@outlook.com",
+    "url": "https://github.com/xpecex/"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xpecex/L5XReport.git"
@@ -39,7 +43,17 @@
     "artifactName": "${productName}-${version}-${arch}.${ext}",
     "asar": true,
     "files": [
-      "src/**/*",
+      "src/assets/css/index.css",
+      "src/assets/css/report.css",
+      "src/assets/icon/l5xreport.png",
+      "src/assets/js/index.min.js",
+      "src/assets/js/report.min.js",
+      "src/main/bypass.js",
+      "src/main/ipcHandlers.js",
+      "src/main/main.js",
+      "src/preload/preload.js",
+      "src/renderer/index.html",
+      "src/renderer/report.html",
       "package.json"
     ],
     "directories": {
@@ -53,12 +67,6 @@
     "win": {
       "target": [
         {
-          "target": "nsis",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
           "target": "zip",
           "arch": [
             "x64"
@@ -70,12 +78,6 @@
       "target": [
         {
           "target": "AppImage",
-          "arch": [
-            "x64"
-          ]
-        },
-        {
-          "target": "deb",
           "arch": [
             "x64"
           ]
