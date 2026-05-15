@@ -21,7 +21,7 @@
     "test:unit": "node __TEST/bypass.unit.test.js",
     "test:e2e": "cross-env E2E_TEST=true npx playwright test e2e",
     "build:bundler": "rollup -c rollup.config.js",
-    "build:package": "npm exec --package=electron-builder -- electron-builder",
+    "build:package": "npm exec --package=electron-builder -- electron-builder --publish never",
     "build:full": "npm run build:bundler && npm run build:package"
   },
   "devDependencies": {
@@ -58,6 +58,12 @@
       "target": [
         {
           "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
           "arch": [
             "x64"
           ]
