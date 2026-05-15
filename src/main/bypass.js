@@ -120,7 +120,7 @@ const L5XScanWorker = async () => {
         // Controller metadata cached once
         const controllerName = $('Controller').attr('Name') || '';
         const lastEdit = $('Controller').attr('LastModifiedDate')
-            ? new Date($('Controller').attr('LastModifiedDate')).toLocaleDateString()
+            ? new Date($('Controller').attr('LastModifiedDate')).toISOString().slice(0, 10)
             : '';
         const auditDate = new Date().toLocaleString();
 
@@ -180,7 +180,7 @@ const L5XScanWorker = async () => {
                         PROGRAM: cachedProgramName,
                         ROUTINE: routineName,
                         RUNG: $rung.attr('Number') || rungIdx,
-                        COMMENT: $rung.find('Comment').text() || '',
+                        COMMENT: ($rung.find('Comment').text() || '').replace(/\r\n/g, '\n'),
                         LEVEL: cachedProgramClass,
                         'BY-PASS': bypassTypes.join(', '),
                         BACKUP: lastEdit,
