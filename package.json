@@ -21,7 +21,7 @@
     "test:unit": "node __TEST/bypass.unit.test.js",
     "test:e2e": "cross-env E2E_TEST=true npx playwright test e2e",
     "build:bundler": "rollup -c rollup.config.js",
-    "build:package": "npm exec --package=electron-builder -- electron-builder",
+    "build:package": "npm exec --package=electron-builder -- electron-builder --publish never",
     "build:full": "npm run build:bundler && npm run build:package"
   },
   "devDependencies": {
@@ -52,12 +52,18 @@
     "extraMetadata": {
       "version": "1.1.0",
       "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports. v1.1 includes worker performance optimizations: metadata caching, conditional text extraction, inline totals, reduced postMessage overhead.",
-      "author": "Pedro Filipe C Ferreira"
+      "author": "Pedro Filipe C Ferreira <xpecex@outlook.com>"
     },
     "win": {
       "target": [
         {
           "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
           "arch": [
             "x64"
           ]
