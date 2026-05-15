@@ -95,7 +95,7 @@ Worker success payload: `{ results, totalRoutinesScanned, totalPrograms }`.
 
 ### Unit Tests (Scanner)
 ```bash
-npm run test
+npm run test:unit
 ```
 Validates `bypass.js` worker output against `ProjectTest.L5X`. Uses Node's native `node:test` module. Checks structure, counts, and field values.
 
@@ -126,16 +126,46 @@ Electron Builder config (`package.json` → `build`):
 
 ---
 
-## Git Workflow
+## Code Styling
 
-Before any modification:
+All JavaScript code must follow **JSDoc** documentation standards.
 
-1. **Create a versioned branch** — `git checkout -b <branch-name>` (use descriptive lowercase name)
-2. **Make the modification**
-3. **Run tests** to validate the change
-4. **Commit** — message format: `type: description`
+Every function, class, and exported module must include JSDoc comments:
 
-Commit types:
+- `@param` — describe each parameter
+- `@returns` / `@return` — describe return value
+- `@description` — brief purpose (first line)
+- `@throws` — optional, for error cases
+
+Example:
+
+```js
+/**
+ * Register all IPC handlers for the main window.
+ * @param {BrowserWindow} mainWindow — The Electron main window instance.
+ * @returns {void}
+ */
+function registerIpcHandlers(mainWindow) {
+  // ...
+}
+```
+
+---
+
+## Workflow
+
+Before any modification, follow this strict workflow:
+
+1. **Analyze the problem** — search codebase, read relevant files, understand the issue
+2. **Create a new git branch** — `git checkout -b <branch-name>` (descriptive lowercase name)
+3. **Make the request** — fix, feature, refactor, docs, style, test, chore
+4. **Run and validate tests** — `npm run test` (unit) and `npm run test:e2e` (e2e)
+5. **Commit and push** — `git commit -m "type: description"` then `git push origin <branch-name>`
+6. **Document** — update `README.md` and `AGENTS.md` if necessary
+
+---
+
+## Git Workflow (Commit Types)
 
 | Type       | Usage                              |
 |------------|------------------------------------|

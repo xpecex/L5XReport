@@ -118,14 +118,23 @@ const registerIpcHandlers = (mainWindow) => {
                         break;
                     case 'ERROR':
                         activeWorker = null;
-                        mainWindow.webContents.send('scan-cancelled', message.payload);
+                        mainWindow.webContents.send('scan-error', {
+                            type: 'scan',
+                            message: message.payload,
+                            timestamp: new Date().toISOString()
+                        });
                         reject(message.payload);
                         break;
                 }
             });
 
             activeWorker.on('error', (e) => {
-                mainWindow.webContents.send('scan-cancelled', e);
+                mainWindow.webContents.send('scan-error', {
+                    type: 'scan',
+                    message: e.message || String(e),
+                    stack: e.stack || '',
+                    timestamp: new Date().toISOString()
+                });
                 reject(e);
             });
             activeWorker.on('exit', (code) => {
@@ -249,6 +258,37 @@ const registerIpcHandlers = (mainWindow) => {
         } catch (err) {
             return { success: false, error: err.message };
         }
+    });
+
+    // ============================================================
+    // Error Dialog
+    // ============================================================
+
+    /**
+     * Shows the error dialog in the sender window with a detailed message.
+     * @function ipcMain.handle show-error-dialog
+     * @param {Event} event - IPC event with sender webContents.
+     * @param {string} message - The error message to display.
+     * @returns {Promise<Object>} Object with `success: true` or `success: false`.
+     */
+    ipcMain.handle('show-error-dialog', async (event, message) => {
+        const win = BrowserWindow.fromWebContents(event.sender);
+        if (!win) return { success: false };
+        win.webContents.send('show-error-dialog', message);
+        return { success: true };
+    });
+
+    /**
+     * Hides the error dialog in the sender window.
+     * @function ipcMain.handle hide-error-dialog
+     * @param {Event} event - IPC event with sender webContents.
+     * @returns {Promise<Object>} Object with `success: true` or `success: false`.
+     */
+    ipcMain.handle('hide-error-dialog', async (event) => {
+        const win = BrowserWindow.fromWebContents(event.sender);
+        if (!win) return { success: false };
+        win.webContents.send('hide-error-dialog');
+        return { success: true };
     });
 
 };
