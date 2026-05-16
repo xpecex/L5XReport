@@ -223,9 +223,9 @@ btnNext1.addEventListener('click', () => showSection(2));
 
 // Section 2
 /** Validate section 2 config when any checkbox changes. */
-[chkAfi, chkBranch, chkNop].forEach(chk => chk.addEventListener('change', validateSection2));
+[chkAfi, chkBranch, chkNop].forEach(chk => chk.addEventListener('change', () => { validateSection2(); saveConfig(); }));
 /** Validate section 2 config when custom keywords input changes. */
-bypassInput.addEventListener('input', validateSection2);
+bypassInput.addEventListener('input', () => { validateSection2(); saveConfig(); });
 /** Navigate from section 2 back to section 1. */
 btnBack2.addEventListener('click', () => showSection(1));
 
@@ -358,8 +358,44 @@ btnDismissError.addEventListener('click', async () => {
     await ipc.hideErrorDialog();
 });
 
+/**
+ * Save the current section 2 configuration to localStorage.
+ * Persists custom keywords and checkbox states for the next session.
+ * @function saveConfig
+ */
+function saveConfig() {
+    localStorage.setItem('l5xreport-config', JSON.stringify({
+        keywords: bypassInput.value,
+        afi: chkAfi.checked,
+        branch: chkBranch.checked,
+        nop: chkNop.checked
+    }));
+}
+
+/**
+ * Load section 2 configuration from localStorage and apply to UI.
+ * Restores custom keywords and checkbox states from the previous session.
+ * @function loadConfig
+ */
+function loadConfig() {
+    try {
+        const stored = localStorage.getItem('l5xreport-config');
+        if (stored) {
+            const config = JSON.parse(stored);
+            bypassInput.value = config.keywords || '';
+            chkAfi.checked = config.afi || false;
+            chkBranch.checked = config.branch || false;
+            chkNop.checked = config.nop || false;
+        }
+    } catch (err) {
+        // Ignore corrupted localStorage data
+    }
+    validateSection2();
+}
+
 // Init
 validateSection2();
+loadConfig();
 
 /**
  * Close the error dialog on Escape key press.
