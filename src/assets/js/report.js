@@ -326,6 +326,29 @@ $('#btn-dismiss-error').addEventListener('click', async () => {
 });
 
 /**
+ * `show-error-dialog` IPC handler — displays the error dialog with message.
+ * @param {string} message - Error message from the main process.
+ */
+ipc.on('show-error-dialog', (event, message) => {
+    const dialog = $('#error-dialog');
+    const msgEl = $('#error-message');
+    if (dialog && msgEl) {
+        msgEl.textContent = message;
+        dialog.classList.remove('hidden');
+    }
+});
+
+/**
+ * `hide-error-dialog` IPC handler — hides the error dialog and clears message.
+ */
+ipc.on('hide-error-dialog', () => {
+    const dialog = $('#error-dialog');
+    if (dialog) {
+        dialog.classList.add('hidden');
+    }
+});
+
+/**
  * Close the error dialog on Escape key press.
  */
 document.addEventListener('keydown', (e) => {
