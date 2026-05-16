@@ -105,5 +105,32 @@ contextBridge.exposeInMainWorld('electronAPI', {
      * @param {string} channel - The IPC channel name.
      * @returns {void}
      */
-    removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel)
+    removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
+
+    /**
+     * Shows the error dialog with a detailed message.
+     * @function showErrorDialog
+     * @param {string} message - The error message to display.
+     * @returns {Promise<void>}
+     */
+    showErrorDialog: (message) => ipcRenderer.invoke('show-error-dialog', message),
+
+    /**
+     * Hides the error dialog.
+     * @function hideErrorDialog
+     * @returns {Promise<void>}
+     */
+    hideErrorDialog: () => ipcRenderer.invoke('hide-error-dialog'),
+
+    /**
+     * Registers a listener for scan error events.
+     * @function onScanError
+     * @param {Function} callback - Callback invoked with error data.
+     * @returns {Function} Unsubscribe function.
+     */
+    onScanError: (callback) => {
+        const subscription = (event, ...args) => callback(...args);
+        ipcRenderer.on('scan-error', subscription);
+        return () => ipcRenderer.removeListener('scan-error', subscription);
+    }
 });

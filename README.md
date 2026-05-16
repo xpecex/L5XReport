@@ -14,7 +14,7 @@ Electron app that scans **L5X files** (Rockwell/Allen-Bradley Logix controller X
 ```bash
 npm install              # Install dependencies
 npm start                # Launch Electron app
-npm run test        # Run unit tests for scanner output validation
+npm run test:unit        # Run unit tests for scanner output validation
 npm run test:e2e        # Run end-to-end tests with Playwright
 ```
 
@@ -35,8 +35,24 @@ npm run build:package    # Package with Electron Builder
 ## Testing
 
 ```bash
-npm run test
+npm run test:unit       # Run unit tests for scanner output validation
+npm run test:e2e        # Run end-to-end tests with Playwright
 ```
+
+## Code Styling
+
+All JavaScript code must follow **JSDoc** documentation standards. Every function, class, and exported module must include JSDoc comments with `@param`, `@returns`, and `@description`.
+
+---
+
+## CI/CD
+
+GitHub Actions workflows automate testing and releases:
+
+- **`.github/workflows/tests.yml`** — runs unit tests and E2E tests on every push/PR
+- **`.github/workflows/release.yml`** — packages and publishes releases on tagged commits
+
+---
 
 ## Architecture
 
@@ -77,6 +93,19 @@ Each scan result contains:
 | AUDIT. DATA | Current timestamp |
 
 Worker success payload: `{ results, totalRoutinesScanned, totalPrograms }`
+
+## Workflow
+
+Before any modification, follow this strict workflow:
+
+1. **Analyze the problem** — search codebase, read relevant files, understand the issue
+2. **Create a new git branch** — `git checkout -b <branch-name>`
+3. **Make the request** — fix, feature, refactor, docs, style, test, chore
+4. **Run and validate tests** — `npm run test` (unit) and `npm run test:e2e` (e2e)
+5. **Commit and push** — `git commit -m "type: description"` then `git push origin <branch-name>`
+6. **Document** — update `README.md` and `AGENTS.md` if necessary
+
+---
 
 ## Dependencies
 

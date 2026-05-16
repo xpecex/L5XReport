@@ -312,6 +312,25 @@ $('#btn-print').addEventListener('click', async () => {
     } else {
         btn.textContent = 'SALVAR PDF';
         btn.disabled = false;
+        if (result.error) {
+            ipc.showErrorDialog(result.error);
+        }
+    }
+});
+
+/**
+ * Dismiss the error dialog by hiding it and clearing the message.
+ */
+$('#btn-dismiss-error').addEventListener('click', async () => {
+    await ipc.hideErrorDialog();
+});
+
+/**
+ * Close the error dialog on Escape key press.
+ */
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && $('#error-dialog') && !$('#error-dialog').classList.contains('hidden')) {
+        ipc.hideErrorDialog();
     }
 });
 

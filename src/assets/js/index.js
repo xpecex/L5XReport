@@ -85,6 +85,12 @@ const btnOpenReport = $('#btn-open-report');
 const btnBack3 = $('#btn-back-3');
 /** Link/button opening the GitHub repository. */
 const gotoGithub = $('#gotoGithub');
+/** Error dialog overlay container. */
+const errorDialog = $('#error-dialog');
+/** Element displaying the error message text. */
+const errorMessage = $('#error-message');
+/** Button dismissing the error dialog. */
+const btnDismissError = $('#btn-dismiss-error');
 
 // Navigation
 /**
@@ -217,9 +223,9 @@ btnNext1.addEventListener('click', () => showSection(2));
 
 // Section 2
 /** Validate section 2 config when any checkbox changes. */
-[chkAfi, chkBranch, chkNop].forEach(chk => chk.addEventListener('change', validateSection2));
+[chkAfi, chkBranch, chkNop].forEach(chk => chk.addEventListener('change', () => { validateSection2(); saveConfig(); }));
 /** Validate section 2 config when custom keywords input changes. */
-bypassInput.addEventListener('input', validateSection2);
+bypassInput.addEventListener('input', () => { validateSection2(); saveConfig(); });
 /** Navigate from section 2 back to section 1. */
 btnBack2.addEventListener('click', () => showSection(1));
 
@@ -284,12 +290,39 @@ btnStartScan.addEventListener('click', async () => {
     ipc.onProgress(progressHandler);
     ipc.onComplete(completeHandler);
 
+    /**
+     * `scan-error` handler — displays error dialog with detailed message.
+     * @param {Object} data - Error data from main process.
+     * @param {string} data.message - Error message.
+     * @param {string} data.stack - Optional stack trace.
+     */
+    const errorHandler = (data) => {
+        setProgress(0, totalRoutines, 'Erro');
+        btnCancelScan.classList.add('hidden');
+        btnOpenReport.classList.add('hidden');
+
+        const displayMessage = data.stack ? `${data.message}\n\n${data.stack}` : data.message;
+        ipc.showErrorDialog(displayMessage);
+    };
+
+    ipc.onScanError(errorHandler);
+
     try {
         await ipc.startScan({ filePath, scanConfig });
     } catch (err) {
         setProgress(0, totalRoutines, 'Erro');
         btnCancelScan.classList.add('hidden');
         btnOpenReport.classList.add('hidden');
+
+        const errorDetails = err instanceof Error ? {
+            message: err.message,
+            stack: err.stack || ''
+        } : {
+            message: String(err),
+            stack: ''
+        };
+
+        await ipc.showErrorDialog(errorDetails.message);
     }
 });
 
@@ -318,5 +351,57 @@ gotoGithub.addEventListener('click', async () => {
     await ipc.gotoGithub();
 });
 
+/**
+ * Dismiss the error dialog by hiding it and clearing the message.
+ */
+btnDismissError.addEventListener('click', async () => {
+    await ipc.hideErrorDialog();
+});
+
+/**
+ * Save the current section 2 configuration to localStorage.
+ * Persists custom keywords and checkbox states for the next session.
+ * @function saveConfig
+ */
+function saveConfig() {
+    localStorage.setItem('l5xreport-config', JSON.stringify({
+        keywords: bypassInput.value,
+        afi: chkAfi.checked,
+        branch: chkBranch.checked,
+        nop: chkNop.checked
+    }));
+}
+
+/**
+ * Load section 2 configuration from localStorage and apply to UI.
+ * Restores custom keywords and checkbox states from the previous session.
+ * @function loadConfig
+ */
+function loadConfig() {
+    try {
+        const stored = localStorage.getItem('l5xreport-config');
+        if (stored) {
+            const config = JSON.parse(stored);
+            bypassInput.value = config.keywords || '';
+            chkAfi.checked = config.afi || false;
+            chkBranch.checked = config.branch || false;
+            chkNop.checked = config.nop || false;
+        }
+    } catch (err) {
+        // Ignore corrupted localStorage data
+    }
+    validateSection2();
+}
+
 // Init
 validateSection2();
+loadConfig();
+
+/**
+ * Close the error dialog on Escape key press.
+ */
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && errorDialog && !errorDialog.classList.contains('hidden')) {
+        ipc.hideErrorDialog();
+    }
+});
