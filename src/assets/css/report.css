@@ -506,6 +506,80 @@
         background-color: var(--color-slate-900);
     }
 
+    .bg-slate-950 {
+        background-color: var(--color-slate-950);
+    }
+
+    .bg-slate-950\/80 {
+        background-color: color-mix(in srgb, oklch(12.9% 0.042 264.695) 80%, transparent);
+
+        @supports (color: color-mix(in lab, red, red)) {
+            background-color: color-mix(in oklab, var(--color-slate-950) 80%, transparent);
+        }
+    }
+
+    .text-red-500 {
+        color: oklch(63.7% 0.237 25.331);
+    }
+
+    .h-6 {
+        height: calc(var(--spacing) * 6);
+    }
+
+    .w-6 {
+        width: calc(var(--spacing) * 6);
+    }
+
+    .gap-3 {
+        gap: calc(var(--spacing) * 3);
+    }
+
+    .rounded-xl {
+        border-radius: 0.75rem;
+    }
+
+    .fixed {
+        position: fixed;
+    }
+
+    .inset-0 {
+        top: calc(var(--spacing) * 0);
+        right: calc(var(--spacing) * 0);
+        bottom: calc(var(--spacing) * 0);
+        left: calc(var(--spacing) * 0);
+    }
+
+    .z-50 {
+        z-index: 50;
+    }
+
+    .max-w-lg {
+        max-width: 32rem;
+    }
+
+    .max-h-\[60vh\] {
+        max-height: 60vh;
+    }
+
+    .overflow-y-auto {
+        overflow-y: auto;
+    }
+
+    .shadow-xl {
+        --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1));
+        box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+    }
+
+    .backdrop-blur-sm {
+        --tw-backdrop-blur: blur(8px);
+        -webkit-backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+        backdrop-filter: var(--tw-backdrop-blur, ) var(--tw-backdrop-brightness, ) var(--tw-backdrop-contrast, ) var(--tw-backdrop-grayscale, ) var(--tw-backdrop-hue-rotate, ) var(--tw-backdrop-invert, ) var(--tw-backdrop-opacity, ) var(--tw-backdrop-saturate, ) var(--tw-backdrop-sepia, );
+    }
+
+    .py-2\.5 {
+        padding-block: calc(var(--spacing) * 2.5);
+    }
+
     .p-2 {
         padding: calc(var(--spacing) * 2);
     }
@@ -862,4 +936,21 @@ body {
 .report-table th {
     max-width: 35mm;
     overflow-wrap: break-word;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.btn-primary {
+    background-color: var(--color-slate-700);
+    color: var(--color-white);
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:hover {
+    background-color: var(--color-slate-600);
 }
