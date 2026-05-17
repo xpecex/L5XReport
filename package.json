@@ -1,7 +1,7 @@
 {
   "name": "L5XReport",
-  "version": "1.1.0",
-  "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports. v1.1 includes worker performance optimizations: metadata caching, conditional text extraction, inline totals, reduced postMessage overhead.",
+  "version": "1.2.0",
+  "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports. v1.2 includes internationalization (i18n) support with 4 languages (PT-BR, EN, ES, FR), language selector, and locale-aware date formatting.",
   "license": "GPLv2",
   "author": {
     "name": "Pedro Filipe C Ferreira <xpecex@outlook.com>",
@@ -62,8 +62,8 @@
       "output": "dist"
     },
     "extraMetadata": {
-      "version": "1.1.0",
-      "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports. v1.1 includes worker performance optimizations: metadata caching, conditional text extraction, inline totals, reduced postMessage overhead.",
+      "version": "1.2.0",
+      "description": "Electron app that scans L5X files (Rockwell/Allen-Bradley Logix controller XML backups) to detect bypass conditions in ladder logic and generates audit reports. v1.2 includes internationalization (i18n) support with 4 languages (PT-BR, EN, ES, FR), language selector, and locale-aware date formatting.",
       "author": "Pedro Filipe C Ferreira <xpecex@outlook.com>"
     },
     "win": {
