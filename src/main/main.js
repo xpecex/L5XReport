@@ -86,11 +86,13 @@ const createWindow = () => {
         }
     });
 
-    mainWindow.webContents.on('before-input-event', (event, input) => {
-        if (input.type === 'keyDown' && input.key === 'F12') {
-            mainWindow.webContents.toggleDevTools();
-        }
-    });
+    if (!app.isPackaged) {
+        mainWindow.webContents.on('before-input-event', (event, input) => {
+            if (input.type === 'keyDown' && input.key === 'F12') {
+                mainWindow.webContents.toggleDevTools();
+            }
+        });
+    }
 
     mainWindow.once('ready-to-show', () => {
         mainWindow.show();

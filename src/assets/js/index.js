@@ -59,6 +59,8 @@ const btnSelectFile = $('#btn-select-file');
 const btnClearFile = $('#btn-clear-file');
 /** Button navigating from section 1 to section 2. */
 const btnNext1 = $('#btn-next-1');
+/** Language selector dropdown element. */
+const langSelector = $('#lang-selector');
 /** Textarea for custom bypass keywords (one per line). */
 const bypassInput = $('#bypass-input');
 /** Checkbox enabling AFI bypass detection. */
@@ -182,7 +184,11 @@ function setProgress(current, total, label) {
         progressFill.style.backgroundColor = 'var(--color-indigo-500)';
         progressFill.style.boxShadow = '0 0 12px rgba(99,102,241,0.4)';
     }
-    progressCounter.textContent = total > 0 ? `${current} de ${total} — ${label}` : `${current} de ${total}`;
+    if (total > 0) {
+        progressCounter.textContent = i18n.t('common.progress_format', { current, total, label });
+    } else {
+        progressCounter.textContent = `${current} de ${total}`;
+    }
 }
 
 // File selection
@@ -212,7 +218,7 @@ fileDropZone.addEventListener('keydown', (e) => { if (e.key === 'Enter') btnSele
 btnClearFile.addEventListener('click', () => {
     filePath = '';
     reportPath = '';
-    filePathEl.textContent = 'Nenhum arquivo selecionado';
+    filePathEl.textContent = i18n.t('section1.no_file');
     fileIcon.classList.replace('bg-indigo-600/10', 'bg-slate-800');
     btnClearFile.classList.add('hidden');
     btnNext1.disabled = true;
@@ -239,7 +245,7 @@ btnStartScan.addEventListener('click', async () => {
     totalPrograms = 0;
     reportPath = '';
     scanResults = [];
-    setProgress(0, 0, 'Aguardando...');
+    setProgress(0, 0, i18n.t('common.progress_waiting'));
     showSection(3);
 
     btnCancelScan.classList.remove('hidden');
@@ -274,7 +280,7 @@ btnStartScan.addEventListener('click', async () => {
      * @param {number} data.totalPrograms - Total programs scanned.
      */
     completeHandler = (data) => {
-        setProgress(totalRoutines, totalRoutines, 'Concluído');
+        setProgress(totalRoutines, totalRoutines, i18n.t('common.progress_done'));
         reportPath = data.reportPath || filePath;
         scanResults = data.results || [];
         totalPrograms = data.totalPrograms || 0;
@@ -337,7 +343,8 @@ btnCancelScan.addEventListener('click', async () => {
  * Handle opening the report window. Sends scan results and metadata via IPC.
  */
 btnOpenReport.addEventListener('click', async () => {
-    let res = { results: scanResults, totalRoutines, totalPrograms, reportPath, filePath };
+    const _lang = localStorage.getItem('l5xreport-lang') || 'pt_BR';
+    let res = { results: scanResults, totalRoutines, totalPrograms, reportPath, filePath, _lang };
     await ipc.openReport(res);
 });
 
@@ -405,3 +412,21 @@ document.addEventListener('keydown', (e) => {
         ipc.hideErrorDialog();
     }
 });
+
+/**
+ * Initialize i18n and set up the language selector.
+ * Loads saved language from localStorage or defaults to pt_BR.
+ */
+(async () => {
+    const savedLang = localStorage.getItem('l5xreport-lang') || 'pt_BR';
+    await i18n.init(savedLang);
+    i18n.applyAll();
+    langSelector.value = savedLang;
+
+    langSelector.addEventListener('change', async (e) => {
+        const newLang = e.target.value;
+        localStorage.setItem('l5xreport-lang', newLang);
+        await i18n.setLang(newLang);
+        i18n.applyAll();
+    });
+})();

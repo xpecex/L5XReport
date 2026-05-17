@@ -21,7 +21,7 @@
                 </div>
                 <div>
                     <h1 class="text-sm font-bold tracking-tight sm:text-base">L5XReport</h1>
-                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-medium">Bypass Audit
+                    <p class="text-[10px] text-slate-400 uppercase tracking-wider font-medium" data-i18n="common.bypass_audit">
                     </p>
                 </div>
             </div>
@@ -31,6 +31,12 @@
                         d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
                 </svg>
             </a>
+            <select id="lang-selector" class="bg-slate-800 border border-slate-700 text-slate-300 text-xs rounded-md px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-indigo-500 cursor-pointer">
+                <option value="pt_BR">Português (BR)</option>
+                <option value="en_US">English (US)</option>
+                <option value="es_ES">Español (ES)</option>
+                <option value="fr_FR">Français (FR)</option>
+            </select>
         </div>
     </header>
 
@@ -42,27 +48,27 @@
             <div class="flex items-center gap-3">
                 <span id="step-1-indicator"
                     class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-bold ring-4 ring-indigo-600/20">1</span>
-                <span class="text-xs font-semibold text-slate-200 hidden sm:block">Arquivo</span>
+                <span class="text-xs font-semibold text-slate-200 hidden sm:block" data-i18n="nav.step1">Arquivo</span>
             </div>
             <div class="h-px bg-slate-800 flex-1 mx-4"></div>
             <div class="flex items-center gap-3">
                 <span id="step-2-indicator"
                     class="w-8 h-8 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center text-sm font-bold">2</span>
-                <span class="text-xs font-semibold text-slate-500 hidden sm:block">Config</span>
+                <span class="text-xs font-semibold text-slate-500 hidden sm:block" data-i18n="nav.step2">Config</span>
             </div>
             <div class="h-px bg-slate-800 flex-1 mx-4"></div>
             <div class="flex items-center gap-3">
                 <span id="step-3-indicator"
                     class="w-8 h-8 rounded-full bg-slate-800 text-slate-500 flex items-center justify-center text-sm font-bold">3</span>
-                <span class="text-xs font-semibold text-slate-500 hidden sm:block">Scan</span>
+                <span class="text-xs font-semibold text-slate-500 hidden sm:block" data-i18n="nav.step3">Scan</span>
             </div>
         </nav>
 
         <!-- Section 1: File Selection -->
         <section data-section="1" class="active flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
             <div class="flex flex-col gap-1">
-                <h2 class="text-lg font-semibold text-white">Importar Backup</h2>
-                <p class="text-sm text-slate-400">Selecione o arquivo .L5X para iniciar a análise.</p>
+                <h2 class="text-lg font-semibold text-white" data-i18n="section1.title">Importar Backup</h2>
+                <p class="text-sm text-slate-400" data-i18n="section1.description">Selecione o arquivo .L5X para iniciar a análise.</p>
             </div>
 
             <div id="file-drop-zone"
@@ -75,32 +81,31 @@
                             d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
                     </svg>
                 </div>
-                <p id="file-path" class="text-sm text-slate-400 text-center break-all px-4">Arraste o arquivo aqui ou
+                <p id="file-path" class="text-sm text-slate-400 text-center break-all px-4" data-i18n="section1.dropzone_placeholder">Arraste o arquivo aqui ou
                     clique para buscar</p>
             </div>
 
             <div class="flex gap-3">
-                <button id="btn-select-file" class="btn-primary flex-1 py-2.5 shadow-lg shadow-indigo-900/20">Selecionar
-                    Arquivo</button>
-                <button id="btn-clear-file" class="btn-secondary px-4 py-2.5 hidden">Limpar</button>
+                <button id="btn-select-file" class="btn-primary flex-1 py-2.5 shadow-lg shadow-indigo-900/20" data-i18n="section1.btn_select">Seleinar Arquivo</button>
+                <button id="btn-clear-file" class="btn-secondary px-4 py-2.5 hidden" data-i18n="section1.btn_clear">Limpar</button>
             </div>
 
             <div class="flex justify-end pt-2">
-                <button id="btn-next-1" disabled class="btn-primary px-10 py-2.5">Próximo</button>
+                <button id="btn-next-1" disabled class="btn-primary px-10 py-2.5" data-i18n="section1.btn_next">Próximo</button>
             </div>
         </section>
 
         <!-- Section 2: Configuration -->
         <section data-section="2" class="flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h2 class="text-lg font-semibold text-white px-1">Parâmetros de Busca</h2>
+            <h2 class="text-lg font-semibold text-white px-1" data-i18n="section2.title">Parâmetros de Busca</h2>
 
             <div class="card p-5 space-y-5">
                 <div>
                     <label for="bypass-input"
-                        class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2">Bits
+                        class="text-xs font-bold uppercase tracking-wider text-slate-400 block mb-2" data-i18n="section2.custom_bits_label">Bits
                         Personalizados</label>
                     <textarea id="bypass-input" rows="3" class="input-field w-full p-3 text-sm resize-none"
-                        placeholder="Ex: BYPASS, MANUT, MAINT, MANUTENCAO, MAINTENANCE... (Um por linha)"></textarea>
+                        data-i18n-attr="placeholder" data-i18n="section2.custom_bits_placeholder" placeholder="Ex: BYPASS, MANUT, MAINT, MANUTENCAO, MAINTENANCE... (Um por linha)"></textarea>
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
@@ -108,45 +113,45 @@
                         class="flex items-center gap-3 p-3 bg-slate-800/50 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
                         <input type="checkbox" id="chk-afi"
                             class="w-4 h-4 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 bg-slate-900" />
-                        <span class="text-sm font-medium">AFI</span>
+                        <span class="text-sm font-medium" data-i18n="section2.chk_afi">AFI</span>
                     </label>
                     <label
                         class="flex items-center gap-3 p-3 bg-slate-800/50 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
                         <input type="checkbox" id="chk-branch"
                             class="w-4 h-4 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 bg-slate-900" />
-                        <span class="text-sm font-medium">Shorted</span>
+                        <span class="text-sm font-medium" data-i18n="section2.chk_branch">Shorted</span>
                     </label>
                     <label
                         class="flex items-center gap-3 p-3 bg-slate-800/50 border border-slate-700 rounded-lg cursor-pointer hover:bg-slate-800 transition-colors">
                         <input type="checkbox" id="chk-nop"
                             class="w-4 h-4 rounded border-slate-700 text-indigo-600 focus:ring-indigo-500 bg-slate-900" />
-                        <span class="text-sm font-medium">NOP</span>
+                        <span class="text-sm font-medium" data-i18n="section2.chk_nop">NOP</span>
                     </label>
                 </div>
 
                 <div class="p-3 bg-amber-500/10 border border-amber-500/20 rounded-lg">
                     <p class="text-[11px] text-amber-200/80 leading-relaxed italic">
-                        <strong>Keywords Padrão:</strong> BYPASS, MANUT, MAINT, MANUTENCAO, MAINTENANCE.
+                        <span data-i18n="section2.default_keywords"><strong>Keywords Padrão:</strong> BYPASS, MANUT, MAINT, MANUTENCAO, MAINTENANCE.</span>
                     </p>
                 </div>
             </div>
 
             <div class="flex justify-between gap-3 pt-2">
-                <button id="btn-back-2" class="btn-secondary px-6 py-2.5">Voltar</button>
+                <button id="btn-back-2" class="btn-secondary px-6 py-2.5" data-i18n="section2.btn_back">Voltar</button>
                 <button id="btn-start-scan" disabled
-                    class="btn-warning px-8 py-2.5 shadow-lg shadow-amber-900/20">Iniciar Análise</button>
+                    class="btn-warning px-8 py-2.5 shadow-lg shadow-amber-900/20" data-i18n="section2.btn_start">Iniciar Análise</button>
             </div>
         </section>
 
         <!-- Section 3: Scan -->
         <section data-section="3" class="flex-col gap-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-            <h2 class="text-lg font-semibold text-white px-1 text-center">Executando Scan</h2>
+            <h2 class="text-lg font-semibold text-white px-1 text-center" data-i18n="section3.title">Executando Scan</h2>
 
             <div class="card p-8 flex flex-col items-center text-center gap-6">
                 <!-- Progress Circular or Bar -->
                 <div class="w-full space-y-2">
                     <div class="flex justify-between text-xs font-bold text-slate-400 uppercase tracking-widest">
-                        <span>Progresso</span>
+                        <span data-i18n="section3.progress_label">Progresso</span>
                         <span id="progress-percent">0%</span>
                     </div>
                     <div class="h-3 w-full bg-slate-800 rounded-full overflow-hidden">
@@ -157,28 +162,28 @@
                 </div>
 
                 <div class="space-y-1">
-                    <p id="progress-counter" class="text-sm text-slate-300 font-medium">Aguardando início...</p>
+                    <p id="progress-counter" class="text-sm text-slate-300 font-medium" data-i18n="section3.waiting">Aguardando início...</p>
                 </div>
 
                 <div id="results-summary" class="w-full hidden grid grid-cols-2 gap-4 border-t border-slate-800 pt-6">
                     <div class="text-center">
                         <span class="block text-2xl font-bold text-amber-500" id="results-count">0</span>
-                        <span class="text-[10px] text-slate-500 uppercase font-bold">Bypasses</span>
+                        <span class="text-[10px] text-slate-500 uppercase font-bold" data-i18n="section3.label_bypasses">Bypasses</span>
                     </div>
                     <div class="text-center">
                         <span class="block text-2xl font-bold text-indigo-500">HTML</span>
-                        <span class="text-[10px] text-slate-500 uppercase font-bold">Formato</span>
+                        <span class="text-[10px] text-slate-500 uppercase font-bold" data-i18n="section3.label_format">Formato</span>
                     </div>
                 </div>
 
-                <button id="btn-cancel-scan" class="btn-danger w-full py-3 hidden">Interromper Scan</button>
+                <button id="btn-cancel-scan" class="btn-danger w-full py-3 hidden" data-i18n="section3.btn_cancel">Interromper Scan</button>
                 <button id="btn-open-report"
-                    class="btn-primary w-full py-3 hidden shadow-lg shadow-indigo-900/40">Visualizar Relatório
+                    class="btn-primary w-full py-3 hidden shadow-lg shadow-indigo-900/40" data-i18n="section3.btn_open_report">Visualizar Relatório
                     Completo</button>
             </div>
 
             <div class="flex justify-start">
-                <button id="btn-back-3" class="btn-secondary px-6 py-2.5">Voltar</button>
+                <button id="btn-back-3" class="btn-secondary px-6 py-2.5" data-i18n="section3.btn_back">Voltar</button>
             </div>
         </section>
     </main>
@@ -193,19 +198,20 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <h3 class="text-lg font-bold text-white">Erro</h3>
+                    <h3 class="text-lg font-bold text-white" data-i18n="common.error_dialog_title">Erro</h3>
                 </div>
                 <div id="error-message" class="text-sm text-slate-300 whitespace-pre-wrap mb-4 max-h-[60vh] overflow-y-auto"></div>
-                <button id="btn-dismiss-error" class="btn-primary w-full py-2.5">Fechar</button>
+                <button id="btn-dismiss-error" class="btn-primary w-full py-2.5" data-i18n="common.error_dialog_close">Fechar</button>
             </div>
         </div>
     </div>
 
     <footer class="p-4 text-center border-t border-slate-900">
-        <p class="text-[10px] text-slate-600 font-medium uppercase tracking-[0.2em]">Safety Compliance Tool &copy; 2026
+        <p class="text-[10px] text-slate-600 font-medium uppercase tracking-[0.2em]" data-i18n="common.footer">Safety Compliance Tool &copy; 2026
         </p>
     </footer>
 
+    <script src="../assets/js/i18n.min.js"></script>
     <script src="../assets/js/index.min.js"></script>
 </body>
 
