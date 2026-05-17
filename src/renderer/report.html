@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -13,8 +13,8 @@
     <div
         class="no-print top-0 left-0 right-0 bg-slate-900 text-white p-4 flex justify-between items-center z-10 shadow-lg">
         <div>
-            <h1 class="text-lg font-bold">L5XReport — Bypass Audit</h1>
-            <p class="text-xs text-slate-400">Relatório de Análise</p>
+            <h1 class="text-lg font-bold" data-i18n="report.topbar_title">L5XReport — Bypass Audit</h1>
+            <p class="text-xs text-slate-400" data-i18n="report.topbar_subtitle">Relatório de Análise</p>
         </div>
         <button id="btn-print"
             class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 transition-colors">
@@ -31,27 +31,37 @@
             <div class="text-right">
                 <h2 class="text-xl font-semibold text-slate-700">&lt;CONTROLLER_NAME&gt;</h2>
                 <div class="flex gap-4 mt-2 text-xs font-bold text-slate-600">
-                    <span>TOTAL PROGRAMS: <span class="text-slate-900">0</span></span>
-                    <span>TOTAL ROUTINES: <span class="text-slate-900">0</span></span>
+                    <span>
+                        <span data-i18n="report.total_programs"> TOTAL PROGRAMS:</span>
+                        <span id="totalPrograms" class="text-slate-900">0</span>
+                    </span>
+                    <span>
+                        <span data-i18n="report.total_routines">TOTAL ROUTINES: </span>
+                        <span id="totalRoutines" class="text-slate-900">0</span>
+                    </span>
                 </div>
             </div>
         </header>
 
         <div class="flex justify-between bg-slate-50 p-3 rounded-lg mb-8 text-sm border border-slate-200">
-            <div><span class="font-bold text-slate-500">BACKUP DATE:</span> --/--/----</div>
-            <div><span class="font-bold text-slate-500">AUDIT DATE:</span> --/--/----, --:--:--</div>
+            <div><span class="font-bold text-slate-500" data-i18n="report.backup_date">BACKUP DATE:</span> --/--/----
+            </div>
+            <div><span class="font-bold text-slate-500" data-i18n="report.audit_date">AUDIT DATE:</span> --/--/----,
+                --:--:--</div>
         </div>
 
         <section class="mb-10">
             <div class="flex items-center mb-4">
                 <div class="h-px flex-1 bg-slate-300"></div>
-                <h3 class="mx-4 text-xs font-black uppercase tracking-tighter text-slate-400">Overview</h3>
+                <h3 class="mx-4 text-xs font-black uppercase tracking-tighter text-slate-400"
+                    data-i18n="report.overview">Overview</h3>
                 <div class="h-px flex-1 bg-slate-300"></div>
             </div>
 
             <div class="grid grid-cols-2 gap-8">
                 <div class="flex flex-col items-center">
-                    <span class="text-sm font-bold mb-4 text-slate-600">DISTRIBUIÇÃO POR NÍVEL</span>
+                    <span class="text-sm font-bold mb-4 text-slate-600"
+                        data-i18n="report.level_distribution">DISTRIBUIÇÃO POR NÍVEL</span>
                     <svg id="piechart" viewBox="0 0 100 100" class="w-48 h-48">
                         <circle cx="50" cy="50" r="40" fill="transparent" stroke="#2E5A97" stroke-width="20"
                             stroke-dasharray="251 251" />
@@ -59,15 +69,18 @@
                             stroke-dasharray="0 251" stroke-dashoffset="-251" />
                     </svg>
                     <div class="flex gap-4 mt-4 text-xs">
-                        <div class="flex items-center"><span class="w-3 h-3 bg-[#B91C1C] mr-1 rounded-sm"></span> Safety
+                        <div class="flex items-center"><span class="w-3 h-3 bg-[#B91C1C] mr-1 rounded-sm"></span> <span
+                                data-i18n="report.level_safety_label">Safety</span>
                             (0%)</div>
                         <div class="flex items-center"><span class="w-3 h-3 bg-[#2E5A97] mr-1 rounded-sm"></span>
-                            Standard (0%)</div>
+                            <span data-i18n="report.level_standard_label">Standard</span> (0%)
+                        </div>
                     </div>
                 </div>
 
                 <div class="flex flex-col items-center border-l border-slate-100 pl-8">
-                    <span class="text-sm font-bold mb-4 text-slate-600">BY-PASS POR TIPO</span>
+                    <span class="text-sm font-bold mb-4 text-slate-600" data-i18n="report.bypass_by_type">BY-PASS POR
+                        TIPO</span>
                     <svg id="bypiechart" viewBox="0 0 100 100" class="w-48 h-48">
                         <circle cx="50" cy="50" r="40" fill="transparent" stroke="#2E5A97" stroke-width="20"
                             stroke-dasharray="0 251" />
@@ -81,7 +94,8 @@
         <section>
             <div class="flex items-center mb-4">
                 <div class="h-px flex-1 bg-slate-300"></div>
-                <h3 class="mx-4 text-xs font-black uppercase tracking-tighter text-slate-400">By-Pass Detailed List</h3>
+                <h3 class="mx-4 text-xs font-black uppercase tracking-tighter text-slate-400"
+                    data-i18n="report.detailed_list">By-Pass Detailed List</h3>
                 <div class="h-px flex-1 bg-slate-300"></div>
             </div>
 
@@ -90,13 +104,15 @@
                     <thead
                         class="bg-[#2E5A97] print:bg-[#2E5A97] text-white text-[10px] uppercase tracking-wider text-center">
                         <tr>
-                            <th class="p-2 border-r border-blue-400/30">Controller</th>
-                            <th class="p-2 border-r border-blue-400/30">Program</th>
-                            <th class="p-2 border-r border-blue-400/30">Routine</th>
-                            <th class="p-2 border-r border-blue-400/30 text-center">Rung</th>
-                            <th class="p-2 border-r border-blue-400/30 text-center">Level</th>
-                            <th class="p-2 border-r border-blue-400/30 text-center text-yellow-300">By-Pass</th>
-                            <th class="p-2">Comment</th>
+                            <th class="p-2 border-r border-blue-400/30" data-i18n="report.th_controller">Controller</th>
+                            <th class="p-2 border-r border-blue-400/30" data-i18n="report.th_program">Program</th>
+                            <th class="p-2 border-r border-blue-400/30" data-i18n="report.th_routine">Routine</th>
+                            <th class="p-2 border-r border-blue-400/30 text-center" data-i18n="report.th_rung">Rung</th>
+                            <th class="p-2 border-r border-blue-400/30 text-center" data-i18n="report.th_level">Level
+                            </th>
+                            <th class="p-2 border-r border-blue-400/30 text-center text-yellow-300"
+                                data-i18n="report.th_bypass">By-Pass</th>
+                            <th class="p-2" data-i18n="report.th_comment">Comment</th>
                         </tr>
                     </thead>
                     <tbody class="text-[10px] align-middle text-center">
@@ -106,8 +122,9 @@
         </section>
 
         <footer class="mt-auto pt-10 text-[9px] text-slate-400 flex justify-between uppercase font-bold italic">
-            <span>Generated by <a href="https://github.com/xpecex/L5XReport" target="_blank">L5XReport</a></span>
-            <span>--/--/----, --:--:--</span>
+            <span data-i18n="report.footer_generated">Generated by <a href="https://github.com/xpecex/L5XReport"
+                    target="_blank">L5XReport</a></span>
+            <span id="report-footer-date">--/--/----, --:--:--</span>
         </footer>
 
     </div>
@@ -122,14 +139,17 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                             d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                     </svg>
-                    <h3 class="text-lg font-bold text-white">Erro</h3>
+                    <h3 class="text-lg font-bold text-white" data-i18n="common.error_dialog_title">Erro</h3>
                 </div>
-                <div id="error-message" class="text-sm text-slate-300 whitespace-pre-wrap mb-4 max-h-[60vh] overflow-y-auto"></div>
-                <button id="btn-dismiss-error" class="btn-primary w-full py-2.5">Fechar</button>
+                <div id="error-message"
+                    class="text-sm text-slate-300 whitespace-pre-wrap mb-4 max-h-[60vh] overflow-y-auto"></div>
+                <button id="btn-dismiss-error" class="btn-primary w-full py-2.5"
+                    data-i18n="common.error_dialog_close">Fechar</button>
             </div>
         </div>
     </div>
 
+    <script src="../assets/js/i18n.min.js"></script>
     <script src="../assets/js/report.min.js"></script>
 
 </body>

@@ -182,17 +182,20 @@ const registerIpcHandlers = (mainWindow) => {
      * @param {Object} data - Contains `results`, `totalRoutines`, `totalPrograms`, `reportPath`, `filePath`.
      * @returns {Promise<Object>} Object with `success: true` or `success: false`.
      */
-    ipcMain.handle('open-report', (event, { results, totalRoutines, totalPrograms, reportPath, filePath }) => {
+    ipcMain.handle('open-report', (event, { results, totalRoutines, totalPrograms, reportPath, filePath, _lang }) => {
         if (!results || results.length === 0) {
             return { success: false };
         }
+
+        const lang = _lang || 'pt_BR';
 
         let result = {
             results,
             totalRoutines,
             totalPrograms,
             reportPath,
-            filePath
+            filePath,
+            lang
         };
 
         const reportWindow = new BrowserWindow({
@@ -204,6 +207,14 @@ const registerIpcHandlers = (mainWindow) => {
                 nodeIntegration: false
             }
         });
+
+        if (!app.isPackaged) {
+            reportWindow.webContents.on('before-input-event', (event, input) => {
+                if (input.type === 'keyDown' && input.key === 'F12') {
+                    reportWindow.webContents.toggleDevTools();
+                }
+            });
+        }
 
         reportWindow.removeMenu();
         reportWindow.loadFile(app.isPackaged ? path.join(app.getAppPath(), 'src/renderer/report.html') : path.resolve('src/renderer', 'report.html'));

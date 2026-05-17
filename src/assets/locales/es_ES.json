@@ -1,0 +1,76 @@
+{
+  "html_lang": "es-ES",
+  "nav": {
+    "progress_label": "Progreso",
+    "step1": "Archivo",
+    "step2": "Config",
+    "step3": "Escaneo"
+  },
+  "section1": {
+    "title": "Importar Respaldo",
+    "description": "Seleccione el archivo .L5X para iniciar el análisis.",
+    "dropzone_placeholder": "Arrastre el archivo aquí o haga clic para buscar",
+    "btn_select": "Seleccionar Archivo",
+    "btn_clear": "Limpiar",
+    "btn_next": "Siguiente",
+    "no_file": "Ningún archivo seleccionado"
+  },
+  "section2": {
+    "title": "Parámetros de Búsqueda",
+    "custom_bits_label": "Bits Personalizados",
+    "custom_bits_placeholder": "Ej: BYPASS, MANUT, MAINT, MAINTENANCE... (Uno por línea)",
+    "chk_afi": "AFI",
+    "chk_branch": "Cortocircuito",
+    "chk_nop": "NOP",
+    "default_keywords": "Palabras Clave Predeterminadas: BYPASS, MANUT, MAINT, MAINTENANCE.",
+    "btn_back": "Atrás",
+    "btn_start": "Iniciar Análisis"
+  },
+  "section3": {
+    "title": "Ejecutando Escaneo",
+    "progress_label": "Progreso",
+    "waiting": "Esperando inicio...",
+    "label_bypasses": "Bypasses",
+    "label_format": "Formato",
+    "btn_cancel": "Cancelar Escaneo",
+    "btn_open_report": "Ver Informe Completo",
+    "btn_back": "Atrás"
+  },
+  "common": {
+    "error_dialog_title": "Error",
+    "error_dialog_close": "Cerrar",
+    "footer": "Safety Compliance Tool © 2026",
+    "progress_format": "{current} de {total} — {label}",
+    "progress_done": "Completado",
+    "progress_waiting": "Esperando...",
+    "bypass_audit": "Bypass Audit"
+  },
+  "report": {
+    "topbar_title": "L5XReport — Bypass Audit",
+    "topbar_subtitle": "Informe de Análisis",
+    "btn_print": "GUARDAR PDF",
+    "btn_print_generating": "Generando PDF...",
+    "btn_print_saved": "¡PDF Guardado!",
+    "header_subtitle": "Informe de Auditoría Bypass",
+    "total_programs": "TOTAL PROGRAMAS:",
+    "total_routines": "TOTAL RUTINAS:",
+    "backup_date": "FECHA RESPALDO:",
+    "audit_date": "FECHA AUDITORÍA:",
+    "overview": "Resumen",
+    "level_distribution": "DISTRIBUCIÓN POR NIVEL",
+    "level_safety": "Seguridad",
+    "level_standard": "Estándar",
+    "bypass_by_type": "BY-PASS POR TIPO",
+    "detailed_list": "Lista Detallada de By-Pass",
+    "th_controller": "Controlador",
+    "th_program": "Programa",
+    "th_routine": "Rutina",
+    "th_rung": "Escalón",
+    "th_level": "Nivel",
+    "th_bypass": "By-Pass",
+    "th_comment": "Comentario",
+    "footer_generated": "Generado por",
+    "level_safety_label": "Seguridad",
+    "level_standard_label": "Estándar"
+  }
+}
